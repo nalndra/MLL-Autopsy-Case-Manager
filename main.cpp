@@ -1,4 +1,4 @@
-#include "DLL.h"
+#include "MLL.h"
 
 int main()
 {
@@ -21,7 +21,7 @@ int main()
         cout << " [4] Kasus Berikutnya\n";
         cout << " [5] Kasus Sebelumnya\n";
         cout << " [6] Tampilkan Arsip (Awal -> Akhir)\n";
-        cout << " [7] Tampilkan Arsip (Akhir -> Akhir)\n";
+        cout << " [7] Tampilkan Arsip (Akhir -> Awal)\n";
         cout << " [8] Tampilkan Kasus Sedang Dianalisis\n";
         cout << " [9] Cari Kasus Mayat\n";
         cout << " [10] Jumlah Kasus dalam Arsip\n";
@@ -36,19 +36,20 @@ int main()
         {
         case 1:
             cout << "ID Kasus   : ";
-            getline(cin, id);
+            cin >> id;
+
             cout << "Nama Mayat : ";
-            getline(cin, nama);
+            cin >> nama;
+
             cout << "Umur       : ";
             cin >> umur;
-            cin.ignore();
+
             current = createElemenKasus(id, nama, umur);
             addKasus(L, current);
             break;
-
         case 2:
             cout << "Masukkan ID Kasus: ";
-            getline(cin, id);
+            cin >> id;
 
             current = searchKasus(L, id);
             if (current == nullptr)
@@ -59,39 +60,77 @@ int main()
             {
                 cout << "Jumlah penyebab: ";
                 cin >> jumlah;
-                cin.ignore();
 
                 for (int i = 0; i < jumlah; i++)
                 {
                     cout << "Penyebab ke-" << i + 1 << ": ";
-                    getline(cin, sebab);
+                    cin >> sebab;
+
                     adrPenyebab q = createElemenPenyebab(sebab);
-                    addPenyebab(current, q); // ⬅ INI MLL
+                    addPenyebab(current, q);
                 }
                 cout << "Penyebab berhasil ditambahkan.\n";
             }
             break;
         case 3:
-            deleteKasus(L, current);
+        {
+            cout << "Masukkan ID Kasus yang akan dihapus: ";
+            cin >> id;
+
+            adrKasus target = searchKasus(L, id);
+            if (target == nullptr)
+            {
+                cout << "Kasus tidak ditemukan.\n";
+            }
+            else
+            {
+                current = target;
+                deleteKasus(L, current);
+            }
             break;
+        }
         case 4:
             if (current != nullptr)
+            {
                 nextKasus(current);
+            }
             else
+            {
                 cout << "Belum ada kasus.\n";
+            }
             break;
-
         case 5:
-            prevKasus(current);
+            if (current != nullptr)
+            {
+                prevKasus(current);
+            }
+            else
+            {
+                cout << "Belum ada kasus.\n";
+            }
             break;
         case 6:
-            displayList(L);
+            if (isEmptyKasus(L))
+            {
+                cout << "Kasus tidak ada.\n";
+            }
+            else
+            {
+                displayList(L);
+            }
             break;
         case 7:
-            for (adrKasus p = L.last; p != nullptr; p = p->prev)
+            if (isEmptyKasus(L))
             {
-                displayKasus(p);
-                cout << endl;
+                cout << "Kasus tidak ada.\n";
+            }
+            else
+            {
+                for (adrKasus p = L.last; p != nullptr; p = p->prev)
+                {
+                    displayKasus(p);
+                    cout << endl;
+                }
             }
             break;
         case 8:
@@ -99,9 +138,17 @@ int main()
             break;
         case 9:
             cout << "Masukkan ID Kasus: ";
-            getline(cin, id);
+            cin >> id;
+
             current = searchKasus(L, id);
-            displayKasus(current);
+            if (current == nullptr)
+            {
+                cout << "Kasus tidak ditemukan.\n";
+            }
+            else
+            {
+                displayKasus(current);
+            }
             break;
         case 10:
             cout << "Jumlah Kasus: " << countKasus(L) << endl;

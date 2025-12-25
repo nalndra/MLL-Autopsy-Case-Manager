@@ -1,4 +1,4 @@
-#include "DLL.h"
+#include "MLL.h"
 
 void createListKasus(ListKasus &L)
 {
@@ -167,7 +167,6 @@ void deleteKasus(ListKasus &L, adrKasus &current)
 
     current = (p->next != nullptr) ? p->next : p->prev;
 
-    // hapus child
     adrPenyebab q;
     while (p->firstPenyebab != nullptr)
     {
